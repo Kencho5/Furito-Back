@@ -1,24 +1,6 @@
 use sqlx::{Error, PgPool, Postgres};
 
 pub async fn setup_database(pool: &PgPool) -> Result<(), Error> {
-    // Check if the database exists
-    let db_exists = sqlx::query("SELECT 1 FROM pg_database WHERE datname = 'furito'")
-        .fetch_optional(pool)
-        .await?
-        .is_some();
-
-    if !db_exists {
-        // Create the database
-        sqlx::query("CREATE DATABASE furito").execute(pool).await?;
-    }
-
-    // Connect to the furito database
-    let furito_db_url = format!(
-        "{}/furito",
-        std::env::var("DB_URL").expect("DB_URL not set")
-    );
-    let furito_pool = PgPool::connect(&furito_db_url).await?;
-
     // Create tables if they don't exist
     let create_users_table = "
         CREATE TABLE IF NOT EXISTS users (
@@ -40,12 +22,8 @@ pub async fn setup_database(pool: &PgPool) -> Result<(), Error> {
     ";
 
     // Execute table creation
-    sqlx::query(create_users_table)
-        .execute(&furito_pool)
-        .await?;
-    sqlx::query(create_posts_table)
-        .execute(&furito_pool)
-        .await?;
+    sqlx::query(create_users_table).execute(pool).await?;
+    sqlx::query(create_posts_table).execute(pool).await?;
 
     // Create index on users.email if it doesn't exist
     sqlx::query(
@@ -53,7 +31,7 @@ pub async fn setup_database(pool: &PgPool) -> Result<(), Error> {
         CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
     ",
     )
-    .execute(&furito_pool)
+    .execute(pool)
     .await?;
 
     Ok(())
