@@ -6,5 +6,5 @@ pub fn create_router() -> Router {
 }
 
 fn auth_routes() -> Router {
-    Router::new().route("/api/login", post(login::login_handler))
+    Router::new().route("/login", post(login::login_handler))
 }
