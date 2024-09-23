@@ -28,10 +28,6 @@ jobs:
       - name: Build
         run: cargo build --release
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
       - name: Deploy to EC2
         uses: appleboy/scp-action@master
         with:
@@ -48,5 +44,5 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            chmod +x /home/ubuntu/furito-prod/furito-back
+            chmod +x furito-prod/furito-back
             sudo systemctl restart furito-prod
