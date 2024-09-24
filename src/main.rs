@@ -11,6 +11,7 @@ async fn main() {
     dotenv().ok();
     let frontend_url = env::var("FRONTEND_URL").expect("Frontend url not set");
     let db_url = env::var("DB_URL").expect("DB url not set");
+    let port = env::var("PORT").expect("Port not set");
 
     let pool = PgPoolOptions::new()
         .max_connections(5)
@@ -29,6 +30,8 @@ async fn main() {
         )
         .with_state(pool);
 
-    let listener = TcpListener::bind("127.0.0.1:8080").await.unwrap();
+    let listener = TcpListener::bind(format!("127.0.0.1:{}", port))
+        .await
+        .unwrap();
     axum::serve(listener, app).await.unwrap();
 }
