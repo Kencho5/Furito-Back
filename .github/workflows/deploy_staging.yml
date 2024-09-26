@@ -28,6 +28,11 @@ jobs:
       - name: Build
         run: cargo build --release
 
+      - name: List Files
+        run: |
+          ls -la target/release
+          ls -la src/utils
+
       - name: Deploy to EC2
         uses: appleboy/scp-action@master
         with:
