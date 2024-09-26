@@ -28,20 +28,13 @@ jobs:
       - name: Build
         run: cargo build --release
 
-      - name: List Files
-        run: |
-          ls -la target/release
-          ls -la src/utils
-
       - name: Deploy to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: |
-            target/release/furito-back
-            src/utils/schema.sql
+          source: "target/release/furito-back,src/utils/schema.sql"
           target: "/home/ubuntu/furito-staging"
 
       - name: SSH into VPS and Restart Service
