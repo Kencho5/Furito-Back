@@ -1,6 +1,7 @@
 mod prelude;
 mod register_routes;
 mod routes;
+mod structs;
 mod utils;
 
 use crate::prelude::*;
