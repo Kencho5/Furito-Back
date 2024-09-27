@@ -6,5 +6,7 @@ pub fn create_router() -> Router<PgPool> {
 }
 
 fn auth_routes() -> Router<PgPool> {
-    Router::new().route("/login", post(login::login_handler))
+    Router::new()
+        .route("/login", post(login::login_handler))
+        .route("/register", post(register::register_handler))
 }

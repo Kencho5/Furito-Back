@@ -17,7 +17,7 @@ async fn validate_credentials(payload: &AuthPayload, pool: &PgPool) -> Result<()
         return Err(AuthError::MissingCredentials);
     }
 
-    let user = sqlx::query_as::<_, User>("SELECT id, email, password FROM users WHERE email = $1")
+    let user = sqlx::query_as::<_, User>("SELECT email, password FROM users WHERE email = $1")
         .bind(&payload.email)
         .fetch_one(pool)
         .await
