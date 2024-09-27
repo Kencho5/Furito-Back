@@ -34,7 +34,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "target/release/furito-back,src/utils/schema.sql"
+          source: "target/release/furito-back,src/utils/schemas"
           target: "/home/ubuntu/furito-prod"
 
       - name: SSH into VPS and Restart Service
