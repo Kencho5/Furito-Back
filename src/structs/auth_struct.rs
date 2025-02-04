@@ -40,9 +40,13 @@ impl AuthBody {
 impl IntoResponse for AuthError {
     fn into_response(self) -> Response {
         let (status, error_message) = match self {
-            AuthError::WrongCredentials => (StatusCode::UNAUTHORIZED, "Wrong credentials"),
-            AuthError::MissingCredentials => (StatusCode::BAD_REQUEST, "Missing credentials"),
-            AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "Token creation error"),
+            AuthError::WrongCredentials => {
+                (StatusCode::UNAUTHORIZED, "AUTH.ERROR.wrong_credentials")
+            }
+            AuthError::MissingCredentials => {
+                (StatusCode::BAD_REQUEST, "AUTH.ERROR.missing_credentials")
+            }
+            AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "AUTH.ERROR.unforseen"),
         };
         let body = Json(json!({
             "error": error_message,

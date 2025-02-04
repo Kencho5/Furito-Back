@@ -5,7 +5,6 @@ mod structs;
 mod utils;
 
 use crate::prelude::*;
-use crate::utils::setup_db::*;
 
 #[tokio::main]
 async fn main() {
@@ -20,7 +19,10 @@ async fn main() {
         .await
         .expect("Failed to connect to the database");
 
-    let _ = setup_database(&pool).await;
+    sqlx::migrate!()
+        .run(&pool)
+        .await
+        .expect("Failed to run migrations");
 
     let app = register_routes::create_router()
         .layer(

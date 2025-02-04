@@ -2,7 +2,7 @@ pub use axum::{
     extract::State,
     http::{HeaderValue, Method, StatusCode},
     response::{IntoResponse, Response},
-    routing::{get, post},
+    routing::post,
     Json, Router,
 };
 pub use dotenv::dotenv;
