@@ -15,10 +15,11 @@ async fn insert_credentials(payload: &RegisterPayload, pool: &PgPool) -> Result<
 
     let pwh = bcrypt::hash(&payload.password).unwrap();
     sqlx::query(
-        "INSERT INTO users(email, name, phone, phone_code, password) VALUES($1, $2, $3, $4, $5)",
+        "INSERT INTO users(name, surname, email, phone, phone_code, password) VALUES($1, $2, $3, $4, $5, $6)",
     )
-    .bind(&payload.email)
     .bind(&payload.name)
+    .bind(&payload.surname)
+    .bind(&payload.email)
     .bind(&payload.phone)
     .bind(&payload.phone_code)
     .bind(&pwh)
