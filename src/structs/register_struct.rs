@@ -12,17 +12,18 @@ pub struct RegisterPayload {
 
 #[derive(Serialize)]
 pub struct RegisterBody {
-    message: String,
+    token: String,
 }
 
 pub enum RegisterError {
     MissingCredentials,
     EmailTaken,
+    TokenCreation,
 }
 
 impl RegisterBody {
-    pub fn new(message: String) -> Self {
-        Self { message }
+    pub fn new(token: String) -> Self {
+        Self { token }
     }
 }
 
@@ -33,6 +34,9 @@ impl IntoResponse for RegisterError {
                 (StatusCode::UNAUTHORIZED, "AUTH.ERROR.missing_credentials")
             }
             RegisterError::EmailTaken => (StatusCode::BAD_REQUEST, "AUTH.ERROR.email_taken"),
+            RegisterError::TokenCreation => {
+                (StatusCode::INTERNAL_SERVER_ERROR, "AUTH.ERROR.unforseen")
+            }
         };
         let body = Json(json!({
             "message": error_message,

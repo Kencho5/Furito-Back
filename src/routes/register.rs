@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use crate::routes::login::create_token;
 use crate::structs::register_struct::*;
 
 pub async fn register_handler(
@@ -7,7 +8,11 @@ pub async fn register_handler(
 ) -> Result<Json<RegisterBody>, RegisterError> {
     insert_credentials(&payload, &pool).await?;
 
-    Ok(Json(RegisterBody::new("Success".to_string())))
+    let token = create_token(payload.email.clone())
+        .await
+        .map_err(|_| RegisterError::TokenCreation)?;
+
+    Ok(Json(RegisterBody::new(token)))
 }
 
 async fn insert_credentials(payload: &RegisterPayload, pool: &PgPool) -> Result<(), RegisterError> {

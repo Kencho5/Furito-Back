@@ -30,7 +30,7 @@ async fn validate_credentials(payload: &AuthPayload, pool: &PgPool) -> Result<()
     Ok(())
 }
 
-async fn create_token(email: String) -> Result<String, AuthError> {
+pub async fn create_token(email: String) -> Result<String, AuthError> {
     let exp = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .unwrap()
