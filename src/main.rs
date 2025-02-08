@@ -29,7 +29,7 @@ async fn main() {
             CorsLayer::new()
                 .allow_origin(frontend_url.parse::<HeaderValue>().unwrap())
                 .allow_methods([Method::GET, Method::POST])
-                .allow_headers([http::header::CONTENT_TYPE]),
+                .allow_headers([http::header::CONTENT_TYPE, http::header::AUTHORIZATION]),
         )
         .with_state(pool);
 
