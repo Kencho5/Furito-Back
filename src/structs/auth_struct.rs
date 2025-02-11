@@ -2,7 +2,6 @@ use crate::prelude::*;
 
 #[derive(Serialize, sqlx::FromRow)]
 pub struct User {
-    // pub id: i32,
     pub email: String,
     pub password: String,
 }
@@ -49,7 +48,7 @@ impl IntoResponse for AuthError {
             AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "AUTH.ERROR.unforseen"),
         };
         let body = Json(json!({
-            "error": error_message,
+            "message": error_message,
         }));
         (status, body).into_response()
     }
