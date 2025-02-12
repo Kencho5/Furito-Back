@@ -11,6 +11,7 @@ pub async fn send_email(
     if let Some(code) = code {
         html = html.replace("{{verification_code}}", &code);
     }
+    println!("{:?}", html);
 
     let dest: Destination = Destination::builder().to_addresses(recipient).build();
     let subject_content = Content::builder()
