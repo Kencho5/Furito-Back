@@ -1,4 +1,5 @@
 pub use crate::structs::app_state::AppState;
+pub use crate::structs::email_struct::*;
 pub use axum::{
     extract::State,
     http::{HeaderValue, Method, StatusCode},
