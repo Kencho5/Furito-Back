@@ -9,9 +9,16 @@ use tracing::Level;
 
 #[tokio::main]
 async fn main() {
-    tracing_subscriber::fmt().with_max_level(Level::INFO).init();
-
     dotenv().ok();
+
+    let log_level = if env::var("ENVIRONMENT").expect("ENVIRONMENT not set") == "staging" {
+        Level::DEBUG
+    } else {
+        Level::INFO
+    };
+
+    tracing_subscriber::fmt().with_max_level(log_level).init();
+
     let frontend_url = env::var("FRONTEND_URL").expect("Frontend url not set");
     let db_url = env::var("DB_URL").expect("DB url not set");
     let port = env::var("PORT").expect("Port not set");

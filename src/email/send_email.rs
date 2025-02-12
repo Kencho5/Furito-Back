@@ -32,15 +32,13 @@ pub async fn send_email(
 
     let email_content = EmailContent::builder().simple(msg).build();
 
-    let send = client
+    client
         .send_email()
         .from_email_address("no-reply@furito.com")
         .destination(dest)
         .content(email_content)
         .send()
         .await?;
-
-    println!("{:?}", send);
 
     Ok(())
 }
