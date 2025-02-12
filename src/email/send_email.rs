@@ -7,12 +7,10 @@ pub async fn send_email(
     subject: String,
     code: Option<String>,
 ) -> Result<(), Error> {
-    println!("asd");
     let mut html: String = include_str!("code.html").to_string();
     if let Some(code) = code {
         html = html.replace("{{verification_code}}", &code);
     }
-    println!("{:?}", html);
 
     let dest: Destination = Destination::builder().to_addresses(recipient).build();
     let subject_content = Content::builder()

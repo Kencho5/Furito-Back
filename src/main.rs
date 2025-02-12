@@ -4,11 +4,13 @@ mod register_routes;
 mod routes;
 mod structs;
 mod utils;
-
 use crate::prelude::*;
+use tracing::Level;
 
 #[tokio::main]
 async fn main() {
+    tracing_subscriber::fmt().with_max_level(Level::INFO).init();
+
     dotenv().ok();
     let frontend_url = env::var("FRONTEND_URL").expect("Frontend url not set");
     let db_url = env::var("DB_URL").expect("DB url not set");
