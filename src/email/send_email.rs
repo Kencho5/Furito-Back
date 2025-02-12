@@ -7,6 +7,7 @@ pub async fn send_email(
     subject: String,
     code: Option<String>,
 ) -> Result<(), Error> {
+    println!("asd");
     let mut html: String = include_str!("code.html").to_string();
     if let Some(code) = code {
         html = html.replace("{{verification_code}}", &code);
