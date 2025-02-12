@@ -3,10 +3,10 @@ use crate::routes::login::create_token;
 use crate::structs::register_struct::*;
 
 pub async fn register_handler(
-    State(pool): State<PgPool>,
+    State(state): State<AppState>,
     Json(payload): Json<RegisterPayload>,
 ) -> Result<Json<RegisterBody>, RegisterError> {
-    insert_credentials(&payload, &pool).await?;
+    insert_credentials(&payload, &state.pool).await?;
 
     let token = create_token(payload.email.clone())
         .await

@@ -3,10 +3,10 @@ use crate::structs::auth_struct::*;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub async fn login_handler(
-    State(pool): State<PgPool>,
+    State(state): State<AppState>,
     Json(payload): Json<AuthPayload>,
 ) -> Result<Json<AuthBody>, AuthError> {
-    validate_credentials(&payload, &pool).await?;
+    validate_credentials(&payload, &state.pool).await?;
     let token = create_token(payload.email).await?;
 
     Ok(Json(AuthBody::new(token)))

@@ -1,3 +1,4 @@
+mod email;
 mod prelude;
 mod register_routes;
 mod routes;
@@ -24,6 +25,11 @@ async fn main() {
         .await
         .expect("Failed to run migrations");
 
+    let aws_config = aws_config::load_from_env().await;
+    let ses_client = aws_sdk_sesv2::Client::new(&aws_config);
+
+    let state = AppState { pool, ses_client };
+
     let app = register_routes::create_router()
         .layer(
             CorsLayer::new()
@@ -31,7 +37,7 @@ async fn main() {
                 .allow_methods([Method::GET, Method::POST])
                 .allow_headers([http::header::CONTENT_TYPE, http::header::AUTHORIZATION]),
         )
-        .with_state(pool);
+        .with_state(state);
 
     let listener = TcpListener::bind(format!("127.0.0.1:{}", port))
         .await
