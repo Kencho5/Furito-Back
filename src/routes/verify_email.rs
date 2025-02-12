@@ -6,6 +6,8 @@ pub async fn verify_email_handler(
     State(state): State<AppState>,
     Json(payload): Json<VerifyEmailPayload>,
 ) -> Result<StatusCode, VerifyEmailError> {
+    println!("asd");
+
     let code: u16 = rand::random_range(1000..9999);
     send_email(
         state.ses_client,
