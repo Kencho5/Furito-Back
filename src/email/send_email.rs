@@ -34,7 +34,7 @@ pub async fn send_email(
 
     client
         .send_email()
-        .from_email_address("no-reply@furito.com")
+        .from_email_address("Furito <no-reply@furito.com>")
         .destination(dest)
         .content(email_content)
         .send()
