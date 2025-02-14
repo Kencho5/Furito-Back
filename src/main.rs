@@ -43,7 +43,7 @@ async fn main() {
         .layer(
             CorsLayer::new()
                 .allow_origin(frontend_url.parse::<HeaderValue>().unwrap())
-                .allow_methods([Method::GET, Method::POST])
+                .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
                 .allow_headers([http::header::CONTENT_TYPE, http::header::AUTHORIZATION]),
         )
         .with_state(state);
