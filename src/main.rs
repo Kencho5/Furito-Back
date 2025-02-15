@@ -36,8 +36,13 @@ async fn main() {
 
     let aws_config = aws_config::load_from_env().await;
     let ses_client = aws_sdk_sesv2::Client::new(&aws_config);
+    let s3_client = aws_sdk_s3::Client::new(&aws_config);
 
-    let state = AppState { pool, ses_client };
+    let state = AppState {
+        pool,
+        ses_client,
+        s3_client,
+    };
 
     let app = register_routes::create_router()
         .layer(
