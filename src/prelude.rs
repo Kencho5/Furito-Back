@@ -11,7 +11,7 @@ pub use dotenv::dotenv;
 pub use jsonwebtoken::{encode, EncodingKey, Header};
 pub use pwhash::bcrypt;
 pub use serde::{Deserialize, Serialize};
-pub use serde_json::json;
+pub use serde_json::{json, Value};
 pub use sqlx::postgres::{PgPool, PgPoolOptions};
 pub use std::env;
 pub use tokio::net::TcpListener;

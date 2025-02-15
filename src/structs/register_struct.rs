@@ -47,18 +47,13 @@ impl IntoResponse for RegisterError {
 
 impl RegisterPayload {
     pub fn validate(&self) -> Result<(), RegisterError> {
-        let required_fields = [
-            self.name.as_str(),
-            self.surname.as_str(),
-            self.email.as_str(),
-            self.phone_code.as_str(),
-            self.phone.as_str(),
-            self.password.as_str(),
-        ];
+        let json_value = serde_json::to_value(self).unwrap();
 
-        for value in required_fields {
-            if value.is_empty() {
-                return Err(RegisterError::MissingCredentials);
+        if let Value::Object(map) = json_value {
+            for (_, value) in map.iter() {
+                if value.as_str().map_or(true, |s| s.is_empty()) {
+                    return Err(RegisterError::MissingCredentials);
+                }
             }
         }
 
