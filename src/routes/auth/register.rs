@@ -1,5 +1,5 @@
 use crate::prelude::*;
-use crate::routes::login::create_token;
+use crate::routes::auth::login::create_token;
 use crate::structs::register_struct::*;
 
 pub async fn register_handler(
