@@ -1,3 +1,5 @@
+use axum::middleware;
+
 use crate::prelude::*;
 use crate::routes::*;
 
@@ -14,6 +16,7 @@ fn auth_routes() -> Router<AppState> {
         .layer(GovernorLayer {
             config: rate_limit!(2, 1),
         })
+        .route_layer(middleware::from_fn(validate_headers))
         .route("/register", post(auth::register::register_handler))
         .layer(GovernorLayer {
             config: rate_limit!(5, 1),

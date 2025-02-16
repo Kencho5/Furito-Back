@@ -1,6 +1,5 @@
 use crate::prelude::*;
 use crate::structs::auth_struct::*;
-use std::time::{SystemTime, UNIX_EPOCH};
 
 pub async fn login_handler(
     State(state): State<AppState>,
@@ -31,16 +30,12 @@ async fn validate_credentials(payload: &AuthPayload, pool: &PgPool) -> Result<()
 }
 
 pub async fn create_token(email: String) -> Result<String, AuthError> {
-    let exp = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap()
-        .as_secs() as u64
-        + 7 * 24 * 60 * 60;
+    let exp = Utc::now() + Duration::days(7);
 
     let claims = Claims {
-        sub: email,
-        company: "Furito".to_owned(),
-        exp,
+        email,
+        company: "Furito LLC".to_string(),
+        exp: exp.timestamp_millis(),
     };
 
     let key = env::var("SECRET_KEY").expect("Secret key not set");

@@ -50,7 +50,7 @@ pub async fn verify_email_code_handler(
             .execute(&state.pool)
             .await;
 
-            if chrono::Utc::now().naive_utc() > expiry {
+            if Utc::now().naive_utc() > expiry {
                 Err(VerifyEmailError::CodeExpired)
             } else {
                 return Ok(StatusCode::OK);

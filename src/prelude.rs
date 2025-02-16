@@ -1,3 +1,4 @@
+pub use crate::middleware::auth::*;
 pub use crate::rate_limit;
 pub use crate::structs::app_state::AppState;
 pub use crate::structs::email_struct::*;
@@ -10,8 +11,9 @@ pub use axum::{
     routing::post,
     Json, Router,
 };
+pub use chrono::{DateTime, Duration, Utc};
 pub use dotenv::dotenv;
-pub use jsonwebtoken::{encode, EncodingKey, Header};
+pub use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 pub use pwhash::bcrypt;
 pub use serde::{Deserialize, Serialize};
 pub use serde_json::{json, Value};

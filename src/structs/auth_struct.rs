@@ -17,17 +17,19 @@ pub struct AuthBody {
     token: String,
 }
 
+#[derive(Debug)]
 pub enum AuthError {
     WrongCredentials,
     MissingCredentials,
     TokenCreation,
+    InvalidToken,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Claims {
-    pub sub: String,
+    pub email: String,
     pub company: String,
-    pub exp: u64,
+    pub exp: i64,
 }
 
 impl AuthBody {
@@ -46,6 +48,7 @@ impl IntoResponse for AuthError {
                 (StatusCode::BAD_REQUEST, "AUTH.ERROR.missing_credentials")
             }
             AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "AUTH.ERROR.unforseen"),
+            AuthError::InvalidToken => (StatusCode::INTERNAL_SERVER_ERROR, "AUTH.ERROR.unforseen"),
         };
         let body = Json(json!({
             "message": error_message,
