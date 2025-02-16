@@ -1,9 +1,11 @@
 mod email;
 mod prelude;
+mod rate_limit;
 mod register_routes;
 mod routes;
 mod structs;
 mod utils;
+
 use crate::prelude::*;
 use tracing::Level;
 
@@ -56,5 +58,10 @@ async fn main() {
     let listener = TcpListener::bind(format!("127.0.0.1:{}", port))
         .await
         .unwrap();
-    axum::serve(listener, app).await.unwrap();
+    axum::serve(
+        listener,
+        app.into_make_service_with_connect_info::<SocketAddr>(),
+    )
+    .await
+    .unwrap();
 }
