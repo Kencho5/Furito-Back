@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 pub struct AddOrgPayload {
     pub org_code: String,
     pub email: String,
@@ -9,11 +9,6 @@ pub struct AddOrgPayload {
     pub address: String,
     pub phone: String,
     pub phone_code: String,
-}
-
-#[derive(Debug)]
-pub enum AddOrgError {
-    MissingCredentials,
 }
 
 #[derive(Serialize)]
@@ -27,12 +22,18 @@ impl AddOrgBody {
     }
 }
 
+pub enum AddOrgError {
+    MissingCredentials,
+    Unforseen,
+}
+
 impl IntoResponse for AddOrgError {
     fn into_response(self) -> Response {
         let (status, error_message) = match self {
             AddOrgError::MissingCredentials => {
                 (StatusCode::UNAUTHORIZED, "AUTH.ERROR.missing_credentials")
             }
+            AddOrgError::Unforseen => (StatusCode::INTERNAL_SERVER_ERROR, "AUTH.ERROR.unforseen"),
         };
         let body = Json(json!({
             "message": error_message,
