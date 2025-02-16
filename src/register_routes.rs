@@ -12,7 +12,7 @@ fn auth_routes() -> Router<AppState> {
     Router::new()
         .route("/login", post(auth::login::login_handler))
         .layer(GovernorLayer {
-            config: rate_limit!(3, 1),
+            config: rate_limit!(2, 1),
         })
         .route("/register", post(auth::register::register_handler))
         .layer(GovernorLayer {
