@@ -2,7 +2,6 @@ use crate::prelude::*;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AddOrgPayload {
-    pub logo: String,
     pub org_code: String,
     pub email: String,
     pub org_type: String,
@@ -12,8 +11,20 @@ pub struct AddOrgPayload {
     pub phone_code: String,
 }
 
+#[derive(Debug)]
 pub enum AddOrgError {
     MissingCredentials,
+}
+
+#[derive(Serialize)]
+pub struct AddOrgBody {
+    presigned_url: String,
+}
+
+impl AddOrgBody {
+    pub fn new(presigned_url: String) -> Self {
+        Self { presigned_url }
+    }
 }
 
 impl IntoResponse for AddOrgError {

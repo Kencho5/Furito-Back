@@ -1,5 +1,6 @@
 pub use crate::structs::app_state::AppState;
 pub use crate::structs::email_struct::*;
+pub use crate::utils::generate_url::put_object_url;
 pub use aws_sdk_s3 as s3;
 pub use axum::{
     extract::State,

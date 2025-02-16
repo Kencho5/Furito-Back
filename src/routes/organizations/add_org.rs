@@ -3,8 +3,17 @@ use crate::{prelude::*, structs::org_struct::*};
 pub async fn add_org_handler(
     State(state): State<AppState>,
     Json(payload): Json<AddOrgPayload>,
-) -> Result<StatusCode, AddOrgError> {
-    payload.validate()?;
+) -> Result<Json<AddOrgBody>, AddOrgError> {
+    //payload.validate()?;
 
-    Ok(StatusCode::OK)
+    let presigned_url = put_object_url(
+        &state.s3_client,
+        "furito-assets",
+        "organization-logos/test.jpg",
+        60,
+    )
+    .await
+    .map_err(|_| AddOrgError::MissingCredentials)?;
+
+    Ok(Json(AddOrgBody::new(presigned_url)))
 }
