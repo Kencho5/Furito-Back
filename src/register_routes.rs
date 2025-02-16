@@ -27,7 +27,7 @@ fn verify_routes() -> Router<AppState> {
             post(verify::verify_email::verify_email_handler),
         )
         .layer(GovernorLayer {
-            config: rate_limit!(60, 1),
+            config: rate_limit!(60, 5),
         })
         .route(
             "/verify-email-code",
