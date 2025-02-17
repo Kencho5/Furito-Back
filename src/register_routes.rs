@@ -1,5 +1,3 @@
-use axum::middleware;
-
 use crate::prelude::*;
 use crate::routes::*;
 
@@ -8,12 +6,19 @@ pub fn create_router() -> Router<AppState> {
         .merge(auth_routes())
         .merge(verify_routes())
         .merge(org_routes())
+        .layer(
+            RateLimitLayer::<RealIp>::builder()
+                .with_gc_interval(1000)
+                .with_gc_interval(std::time::Duration::from_secs(60))
+                .default_handle_error(),
+        )
 }
 
 fn auth_routes() -> Router<AppState> {
     Router::new()
         .route("/login", post(auth::login::login_handler))
-        .route_layer(middleware::from_fn(validate_headers))
+        .route_layer(rate_limit!(2))
+        //.route_layer(middleware::from_fn(validate_headers))
         .route("/register", post(auth::register::register_handler))
 }
 

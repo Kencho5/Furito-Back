@@ -1,6 +1,7 @@
 mod email;
 mod middleware;
 mod prelude;
+mod rate_limit;
 mod register_routes;
 mod routes;
 mod structs;
