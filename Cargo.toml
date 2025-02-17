@@ -21,5 +21,4 @@ rand = "0.9.0"
 chrono = { version = "0.4.39", features = ["serde"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3" }
-tower_governor = "0.6.0"
 image-base64 = "0.1.0"

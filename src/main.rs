@@ -1,7 +1,6 @@
 mod email;
 mod middleware;
 mod prelude;
-mod rate_limit;
 mod register_routes;
 mod routes;
 mod structs;
@@ -20,7 +19,7 @@ async fn main() {
         Level::INFO
     };
 
-    //tracing_subscriber::fmt().with_max_level(log_level).init();
+    tracing_subscriber::fmt().with_max_level(log_level).init();
 
     let frontend_url = env::var("FRONTEND_URL").expect("Frontend url not set");
     let db_url = env::var("DB_URL").expect("DB url not set");
