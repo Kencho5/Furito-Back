@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, sqlx::FromRow)]
 pub struct AddOrgPayload {
     pub org_code: String,
     pub email: String,
@@ -22,18 +22,23 @@ impl AddOrgBody {
     }
 }
 
-pub enum AddOrgError {
+pub enum OrgsError {
     MissingCredentials,
     Unforseen,
+    Unauthorized,
+    EmptyOrgs,
 }
 
-impl IntoResponse for AddOrgError {
+impl IntoResponse for OrgsError {
     fn into_response(self) -> Response {
         let (status, error_message) = match self {
-            AddOrgError::MissingCredentials => {
-                (StatusCode::UNAUTHORIZED, "AUTH.ERROR.missing_credentials")
-            }
-            AddOrgError::Unforseen => (StatusCode::INTERNAL_SERVER_ERROR, "AUTH.ERROR.unforseen"),
+            OrgsError::MissingCredentials => (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "AUTH.ERROR.missing_credentials",
+            ),
+            OrgsError::Unforseen => (StatusCode::INTERNAL_SERVER_ERROR, "AUTH.ERROR.unforseen"),
+            OrgsError::Unauthorized => (StatusCode::UNAUTHORIZED, "AUTH.ERROR.unauthorized"),
+            OrgsError::EmptyOrgs => (StatusCode::NOT_FOUND, "empty orgs"),
         };
         let body = Json(json!({
             "message": error_message,
@@ -43,17 +48,32 @@ impl IntoResponse for AddOrgError {
 }
 
 impl AddOrgPayload {
-    pub fn validate(&self) -> Result<(), AddOrgError> {
+    pub fn validate(&self) -> Result<(), OrgsError> {
         let json_value = serde_json::to_value(self).unwrap();
 
         if let Value::Object(map) = json_value {
             for (_, value) in map.iter() {
                 if value.as_str().map_or(true, |s| s.is_empty()) {
-                    return Err(AddOrgError::MissingCredentials);
+                    return Err(OrgsError::MissingCredentials);
                 }
             }
         }
 
         Ok(())
+    }
+}
+
+#[derive(Serialize)]
+pub struct OrgsResponse {
+    pub orgs: Vec<AddOrgPayload>,
+    pub total: i16,
+}
+
+impl OrgsResponse {
+    pub fn new(orgs: Vec<AddOrgPayload>) -> Self {
+        Self {
+            total: orgs.len() as i16,
+            orgs,
+        }
     }
 }

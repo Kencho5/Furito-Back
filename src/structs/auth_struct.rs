@@ -48,7 +48,9 @@ impl IntoResponse for AuthError {
                 (StatusCode::BAD_REQUEST, "AUTH.ERROR.missing_credentials")
             }
             AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "AUTH.ERROR.unforseen"),
-            AuthError::InvalidToken => (StatusCode::INTERNAL_SERVER_ERROR, "AUTH.ERROR.unforseen"),
+            AuthError::InvalidToken => {
+                (StatusCode::INTERNAL_SERVER_ERROR, "AUTH.ERROR.unauthorized")
+            }
         };
         let body = Json(json!({
             "message": error_message,

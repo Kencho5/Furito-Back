@@ -1,9 +1,12 @@
 pub use crate::middleware::auth::*;
 pub use crate::rate_limit;
 pub use crate::structs::app_state::AppState;
+pub use crate::structs::auth_struct::AuthError;
 pub use crate::structs::email_struct::*;
 pub use crate::utils::generate_url::put_object_url;
+pub use crate::utils::validate_token::*;
 pub use aws_sdk_s3 as s3;
+pub use axum::extract::Request;
 pub use axum::middleware;
 pub use axum::{
     extract::State,
@@ -15,6 +18,7 @@ pub use axum::{
 pub use axum_gcra::{gcra::Quota, real_ip::RealIp, RateLimitLayer};
 pub use chrono::{DateTime, Duration, Utc};
 pub use dotenv::dotenv;
+pub use http::HeaderMap;
 pub use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 pub use pwhash::bcrypt;
 pub use serde::{Deserialize, Serialize};

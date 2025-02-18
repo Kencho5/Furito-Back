@@ -18,8 +18,8 @@ fn auth_routes() -> Router<AppState> {
     Router::new()
         .route("/login", post(auth::login::login_handler))
         .route_layer(rate_limit!(2))
-        //.route_layer(middleware::from_fn(validate_headers))
         .route("/register", post(auth::register::register_handler))
+        .route_layer(rate_limit!(3))
 }
 
 fn verify_routes() -> Router<AppState> {
@@ -28,12 +28,18 @@ fn verify_routes() -> Router<AppState> {
             "/verify-email",
             post(verify::verify_email::verify_email_handler),
         )
+        .route_layer(rate_limit!(3))
         .route(
             "/verify-email-code",
             post(verify::verify_email::verify_email_code_handler),
         )
+        .route_layer(rate_limit!(1))
 }
 
 fn org_routes() -> Router<AppState> {
-    Router::new().route("/add-org", post(organizations::add_org::add_org_handler))
+    Router::new()
+        .route("/add-org", post(organizations::add_org::add_org_handler))
+        .route("/get-orgs", post(organizations::get_orgs::get_orgs_handler))
+        .route_layer(rate_limit!(5))
+        .route_layer(middleware::from_fn(validate_headers))
 }
