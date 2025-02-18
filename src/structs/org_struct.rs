@@ -63,14 +63,26 @@ impl AddOrgPayload {
     }
 }
 
+#[derive(Serialize, Deserialize, sqlx::FromRow)]
+pub struct OrgsPayload {
+    pub id: i32,
+    pub org_code: String,
+    pub email: String,
+    pub org_type: String,
+    pub org_name: String,
+    pub address: String,
+    pub phone: String,
+    pub phone_code: String,
+}
+
 #[derive(Serialize)]
 pub struct OrgsResponse {
-    pub orgs: Vec<AddOrgPayload>,
+    pub orgs: Vec<OrgsPayload>,
     pub total: i16,
 }
 
 impl OrgsResponse {
-    pub fn new(orgs: Vec<AddOrgPayload>) -> Self {
+    pub fn new(orgs: Vec<OrgsPayload>) -> Self {
         Self {
             total: orgs.len() as i16,
             orgs,

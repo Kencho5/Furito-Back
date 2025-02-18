@@ -9,7 +9,7 @@ pub async fn get_orgs_handler(
         .await
         .map_err(|_| OrgsError::Unauthorized)?;
 
-    let orgs = sqlx::query_as::<_, AddOrgPayload>("SELECT * FROM organizations WHERE owner = $1")
+    let orgs = sqlx::query_as::<_, OrgsPayload>("SELECT * FROM organizations WHERE owner = $1")
         .bind(&claims.email)
         .fetch_all(&state.pool)
         .await
