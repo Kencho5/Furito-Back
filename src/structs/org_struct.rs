@@ -73,6 +73,7 @@ pub struct OrgsPayload {
     pub address: String,
     pub phone: String,
     pub phone_code: String,
+    pub enabled: bool,
 }
 
 #[derive(Serialize)]
@@ -88,4 +89,9 @@ impl OrgsResponse {
             orgs,
         }
     }
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct ToggleOrgStatusPayload {
+    pub id: i32,
 }

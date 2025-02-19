@@ -42,5 +42,10 @@ fn org_routes() -> Router<AppState> {
         .route_layer(rate_limit!(2000))
         .route("/get-orgs", post(organizations::get_orgs::get_orgs_handler))
         .route_layer(rate_limit!(500))
+        .route(
+            "/toggle-org-status",
+            post(organizations::toggle_org_status::toggle_org_handler),
+        )
+        .route_layer(rate_limit!(500))
         .route_layer(middleware::from_fn(validate_headers))
 }
