@@ -14,7 +14,7 @@ use tracing::Level;
 async fn main() {
     dotenv().ok();
 
-    let log_level = if env::var("ENVIRONMENT").expect("ENVIRONMENT not set") == "staging" {
+    let log_level = if env::var("ENVIRONMENT").expect("ENVIRONMENT not set") == "development" {
         Level::DEBUG
     } else {
         Level::INFO

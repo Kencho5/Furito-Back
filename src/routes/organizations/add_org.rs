@@ -28,7 +28,7 @@ pub async fn add_org_handler(
     .await
     .map_err(|_| OrgsError::Unforseen)?;
 
-    let file_name = format!("{}-{}", org_id.0, payload.org_name);
+    let file_name = format!("{}-{}", org_id.0, payload.org_code);
     let presigned_url = put_object_url(
         &state.s3_client,
         "furito-assets",
