@@ -1,5 +1,4 @@
 use crate::prelude::*;
-use crate::structs::auth_struct::*;
 
 pub async fn login_handler(
     State(state): State<AppState>,

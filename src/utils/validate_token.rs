@@ -1,12 +1,17 @@
-use crate::{
-    prelude::*,
-    structs::auth_struct::{AuthError, Claims},
-};
+use crate::prelude::*;
 
-pub async fn validate_token(token: &str) -> Result<Claims, AuthError> {
+pub async fn validate_token(headers: HeaderMap) -> Result<Claims, AuthError> {
+    let token = headers
+        .get(http::header::AUTHORIZATION)
+        .and_then(|header| header.to_str().ok());
+
+    if token.is_none() {
+        return Err(AuthError::InvalidToken);
+    }
+
     let key = env::var("SECRET_KEY").expect("Secret key not set");
     let token_data = decode::<Claims>(
-        &token,
+        &token.unwrap(),
         &DecodingKey::from_secret(key.as_ref()),
         &Validation::default(),
     )

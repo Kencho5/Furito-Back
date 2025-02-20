@@ -1,7 +1,7 @@
 pub use crate::middleware::auth::*;
 pub use crate::rate_limit;
 pub use crate::structs::app_state::AppState;
-pub use crate::structs::auth_struct::AuthError;
+pub use crate::structs::auth_struct::*;
 pub use crate::structs::email_struct::*;
 pub use crate::utils::generate_url::put_object_url;
 pub use crate::utils::validate_token::*;

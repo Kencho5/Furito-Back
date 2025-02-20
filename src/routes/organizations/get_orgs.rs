@@ -4,8 +4,7 @@ pub async fn get_orgs_handler(
     State(state): State<AppState>,
     headers: HeaderMap,
 ) -> Result<Json<OrgsResponse>, OrgsError> {
-    let token = extract_token(headers).unwrap();
-    let claims = validate_token(&token)
+    let claims = validate_token(headers)
         .await
         .map_err(|_| OrgsError::Unauthorized)?;
 

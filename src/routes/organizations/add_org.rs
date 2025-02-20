@@ -7,8 +7,7 @@ pub async fn add_org_handler(
 ) -> Result<Json<AddOrgBody>, OrgsError> {
     payload.validate()?;
 
-    let token = extract_token(headers).unwrap();
-    let claims = validate_token(&token)
+    let claims = validate_token(headers)
         .await
         .map_err(|_| OrgsError::Unauthorized)?;
 
