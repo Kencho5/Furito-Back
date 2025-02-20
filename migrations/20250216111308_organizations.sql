@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS organizations (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY DEFAULT generate_random_id(6),
     email VARCHAR(255) NOT NULL,
     org_code VARCHAR(255) NOT NULL,
     org_type VARCHAR(255) NOT NULL,
