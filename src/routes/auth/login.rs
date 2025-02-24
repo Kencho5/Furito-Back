@@ -16,7 +16,7 @@ async fn validate_credentials(payload: &AuthPayload, pool: &PgPool) -> Result<()
     }
 
     let user = sqlx::query_as::<_, User>("SELECT email, password FROM users WHERE email = $1")
-        .bind(&payload.email)
+        .bind(&payload.email.to_lowercase())
         .fetch_one(pool)
         .await
         .map_err(|_| AuthError::WrongCredentials)?;
