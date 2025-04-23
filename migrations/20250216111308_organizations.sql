@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS organizations (
-    id INTEGER PRIMARY KEY DEFAULT generate_random_id(6),
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1000),
     email VARCHAR(255) NOT NULL,
     org_code VARCHAR(255) NOT NULL,
     org_type VARCHAR(255) NOT NULL,
@@ -12,3 +12,7 @@ CREATE TABLE IF NOT EXISTS organizations (
     owner VARCHAR(255),
     CONSTRAINT fk_owner FOREIGN KEY (owner) REFERENCES users(email) ON DELETE CASCADE
 );
+
+CREATE INDEX IF NOT EXISTS idx_orgs_email ON organizations(email);
+CREATE INDEX IF NOT EXISTS idx_orgs_org_code ON organizations(org_code);
+CREATE INDEX IF NOT EXISTS idx_orgs_org_name ON organizations(org_name);
