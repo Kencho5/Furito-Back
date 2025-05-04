@@ -6,10 +6,9 @@ pub use crate::structs::email_struct::*;
 pub use crate::utils::generate_url::put_object_url;
 pub use crate::utils::validate_token::*;
 pub use aws_sdk_s3 as s3;
-pub use axum::extract::Request;
 pub use axum::middleware;
 pub use axum::{
-    extract::State,
+    extract::{Path, Request, State},
     http::{HeaderValue, Method, StatusCode},
     response::{IntoResponse, Response},
     routing::post,

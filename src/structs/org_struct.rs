@@ -1,6 +1,36 @@
 use crate::prelude::*;
 
 #[derive(Serialize, Deserialize, sqlx::FromRow)]
+pub struct Org {
+    pub id: i32,
+    pub org_code: String,
+    pub email: String,
+    pub org_type: String,
+    pub org_name: String,
+    pub address: String,
+    pub phone: String,
+    pub phone_code: String,
+    pub enabled: bool,
+}
+
+//GET ORGS
+#[derive(Serialize)]
+pub struct OrgsResponse {
+    pub orgs: Vec<Org>,
+    pub total: i16,
+}
+
+impl OrgsResponse {
+    pub fn new(orgs: Vec<Org>) -> Self {
+        Self {
+            total: orgs.len() as i16,
+            orgs,
+        }
+    }
+}
+
+//ADD ORG
+#[derive(Serialize, Deserialize, sqlx::FromRow, Debug)]
 pub struct AddOrgPayload {
     pub org_code: String,
     pub email: String,
@@ -22,6 +52,21 @@ impl AddOrgBody {
     }
 }
 
+impl AddOrgPayload {
+    pub fn validate(&self) -> Result<(), OrgsError> {
+        validate_json_object(self)
+    }
+}
+
+//ORG STATUS
+#[derive(Serialize, Deserialize)]
+pub struct ToggleOrgStatusPayload {
+    pub id: i32,
+}
+
+//EDIT ORG
+
+//ERROR
 pub enum OrgsError {
     MissingCredentials,
     Unforseen,
@@ -47,51 +92,18 @@ impl IntoResponse for OrgsError {
     }
 }
 
-impl AddOrgPayload {
-    pub fn validate(&self) -> Result<(), OrgsError> {
-        let json_value = serde_json::to_value(self).unwrap();
+fn validate_json_object<T: Serialize>(obj: &T) -> Result<(), OrgsError> {
+    let json_value = serde_json::to_value(obj).unwrap();
+    if let Value::Object(map) = json_value {
+        for (_, value) in map.iter() {
+            if value.is_boolean() || value.is_number() {
+                continue;
+            }
 
-        if let Value::Object(map) = json_value {
-            for (_, value) in map.iter() {
-                if value.as_str().map_or(true, |s| s.is_empty()) {
-                    return Err(OrgsError::MissingCredentials);
-                }
+            if value.as_str().map_or(true, |s| s.is_empty()) {
+                return Err(OrgsError::MissingCredentials);
             }
         }
-
-        Ok(())
     }
-}
-
-#[derive(Serialize, Deserialize, sqlx::FromRow)]
-pub struct OrgsPayload {
-    pub id: i32,
-    pub org_code: String,
-    pub email: String,
-    pub org_type: String,
-    pub org_name: String,
-    pub address: String,
-    pub phone: String,
-    pub phone_code: String,
-    pub enabled: bool,
-}
-
-#[derive(Serialize)]
-pub struct OrgsResponse {
-    pub orgs: Vec<OrgsPayload>,
-    pub total: i16,
-}
-
-impl OrgsResponse {
-    pub fn new(orgs: Vec<OrgsPayload>) -> Self {
-        Self {
-            total: orgs.len() as i16,
-            orgs,
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct ToggleOrgStatusPayload {
-    pub id: i32,
+    Ok(())
 }
